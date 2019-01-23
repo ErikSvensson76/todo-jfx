@@ -1,9 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.layout.*?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.control.ListView?>
 
 <BorderPane fx:controller="se.lexicon.erik.todo_app.controller.Controller"
 	xmlns:fx="http://javafx.com/fxml">
+	
+	<left>
+		<ListView >
+			
+		</ListView>
+	</left>
 	
 	
 </BorderPane>
