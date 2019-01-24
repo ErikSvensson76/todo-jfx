@@ -38,7 +38,10 @@ public class TodoItem {
 		this.deadLine = deadLine;
 	}
 	
-	
+	@Override
+	public String toString() {
+		return getShortDescription();
+	}
 	
 	
 	
