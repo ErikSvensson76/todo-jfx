@@ -1,0 +1,7 @@
+Fix Car	Buy car light and install them	2019-03-25
+JavaFX material	Finalize JavaFX material for future courses	2019-07-10
+Selma's birthday	Buy skateboard and cake	2019-03-25
+Clean my desk	Remove old papers and keep things tidy	2019-02-10
+Prepare Lecture	Finish preparing lecture for group 23	2019-03-10
+Install Dishwasher	Need to be at home between 14.00 - 15.00	2019-01-29
+Möte	Möte hos Niclas kl 9.00	2019-01-28

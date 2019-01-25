@@ -9,11 +9,12 @@ import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.util.Iterator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javafx.collections.FXCollections;
 import se.lexicon.erik.todo_app.model.TodoItem;
 
-public class TodoItemFileDao {
+public class TodoItemFileDao implements TodoItemDao{
 	private static TodoItemFileDao instance = new TodoItemFileDao();
 	private static String fileName = "TodoListItems.txt";
 	
@@ -72,4 +73,31 @@ public class TodoItemFileDao {
 			}
 		}		
 	}
+
+	@Override
+	public List<TodoItem> getAllTodoItems() {
+		return todoItems.stream()
+				.sorted((o1,o2) -> o1.getDeadLine().compareTo(o2.getDeadLine()))
+				.collect(Collectors.toList());
+	}
+
+	@Override
+	public TodoItem save(TodoItem item) throws IllegalArgumentException {
+		if(item == null) {
+			throw new IllegalArgumentException("TodoItem item was " + item);
+		}
+		
+		todoItems.add(item);
+		return item;
+	}
+
+	@Override
+	public void remove(TodoItem item) throws IllegalArgumentException {
+		if(item == null) {
+		throw new IllegalArgumentException("TodoItem item was " + item);
+		}	
+		todoItems.remove(item);		
+	}
+	
+
 }

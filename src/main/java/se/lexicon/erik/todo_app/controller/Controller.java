@@ -1,31 +1,33 @@
 package se.lexicon.erik.todo_app.controller;
 
-import java.time.LocalDate;
+import java.io.IOException;
+import java.util.Optional;
 
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.control.ButtonType;
+import javafx.scene.control.Dialog;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TextArea;
-import se.lexicon.erik.todo_app.data_access.TodoItemDaoList;
+import javafx.scene.layout.BorderPane;
+import se.lexicon.erik.todo_app.data_access.TodoItemDao;
+import se.lexicon.erik.todo_app.data_access.TodoItemFileDao;
 import se.lexicon.erik.todo_app.model.TodoItem;
 
 public class Controller {
 	
-	private TodoItemDaoList todoItemDao = TodoItemDaoList.get();
+	private TodoItemDao todoItemDao = TodoItemFileDao.get();
 	
 	@FXML private ListView<TodoItem> todoListView;
 	@FXML private TextArea itemDetailsTextArea;
 	@FXML private Label deadlineLabel;
+	@FXML private BorderPane mainBorderPane;
 	
 	public void initialize() {
-		todoItemDao.save(new TodoItem("Fix Car", "Buy car light and install them", LocalDate.parse("2019-03-25")));
-		todoItemDao.save(new TodoItem("JavaFX material", "Finalize JavaFX material for future courses", LocalDate.parse("2019-07-10")));
-		todoItemDao.save(new TodoItem("Selma's birthday", "Buy skateboard and cake", LocalDate.parse("2019-03-25")));
-		todoItemDao.save(new TodoItem("Clean my desk", "Remove old papers and keep things tidy", LocalDate.parse("2019-02-10")));
-		todoItemDao.save(new TodoItem("Prepare Lecture", "Finish preparing lecture for group 23", LocalDate.parse("2019-03-10")));
 		
 		todoListView.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<TodoItem>() {
 			@Override
@@ -48,15 +50,37 @@ public class Controller {
 	}
 	
 	@FXML
+	public void showNewItemDialog() {
+		Dialog<ButtonType> dialog = new Dialog<>();
+		dialog.initOwner(mainBorderPane.getScene().getWindow());
+		FXMLLoader loader = new FXMLLoader();
+		loader.setLocation(getClass().getResource("/fxml/todoItemDialog.fxml"));
+		try {
+			dialog.getDialogPane().setContent(loader.load());
+		}catch(IOException e) {
+			System.out.println("Could not load the dialog");
+			e.printStackTrace();
+			return;
+		}
+		
+		dialog.getDialogPane().getButtonTypes().add(ButtonType.OK);
+		dialog.getDialogPane().getButtonTypes().add(ButtonType.CANCEL);
+		
+		Optional<ButtonType> result = dialog.showAndWait();
+		if(result.isPresent() && result.get() == ButtonType.OK) {
+			DialogController controller = loader.getController();
+			controller.processResults();
+			todoListView.getItems().setAll(todoItemDao.getAllTodoItems());
+		}else {
+			System.out.println("Cancel pressed");
+		}
+	}
+	
+	@FXML
 	public void handleClickListView() {
 		TodoItem item = todoListView.getSelectionModel().getSelectedItem();
 		itemDetailsTextArea.setText(item.getDetails());
 		deadlineLabel.setText(item.getDeadLine().toString());
-//		StringBuilder sb = new StringBuilder(item.getDetails());
-//		sb.append("\n\n\n\n");
-//		sb.append("Due: ");
-//		sb.append(item.getDeadLine());
-//		itemDetailsTextArea.setText(sb.toString());
 	}
 	
 }

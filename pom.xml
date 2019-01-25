@@ -32,7 +32,7 @@
                 <version>8.1.5</version>
                 <configuration>
 
-                    <mainClass>se.lexicon.erik.todo_app.MainApp</mainClass>
+                    <mainClass>se.lexicon.erik.todo_app.Main</mainClass>
 
                 </configuration>
             </plugin>
